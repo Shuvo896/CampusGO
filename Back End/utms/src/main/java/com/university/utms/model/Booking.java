@@ -1,11 +1,13 @@
 package com.university.utms.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(name = "bookings")
 @Getter
 @Setter
@@ -22,31 +24,35 @@ public class Booking {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "bus_id", nullable = false)
-    private Bus bus;
+    @JoinColumn(name = "schedule_id")
+    @JsonBackReference
+    private Schedule schedule;
 
     @Column(nullable = false)
-    private int seatNumber;
+    private int seatCount;
+
+    @Column(nullable = false)
+    private boolean standing = false;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Status status;
+    private Status status = Status.booked;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PaymentStatus paymentStatus;
+    private PaymentStatus paymentStatus = PaymentStatus.pending;
 
-    @Column(unique = true, nullable = false, length = 255)
+    @Column(columnDefinition = "TEXT")
     private String qrCode;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public enum Status {
-        BOOKED, CANCELLED
+        booked, cancelled
     }
 
     public enum PaymentStatus {
-        PENDING, PAID
+        pending, paid
     }
 }

@@ -10,5 +10,13 @@ public interface BookingService {
     Booking createBooking(Booking booking);
     Booking updateBooking(Long id, Booking booking);
     void deleteBooking(Long id);
+    Booking reserveSeats(Long busId, int seatCount, String userEmail);
+    void cancelBooking(Long bookingId, String userEmail);
+    Booking markAsPaid(Long bookingId, String userEmail);
+    List<Booking> getBookingsByUserEmail(String email);
+    List<Booking> getBookingsByBus(Long busId);
+    List<Booking> getAllBookingsForAdmin(String userEmail, Long busId, String status, String paymentStatus);
+
+
 }
   
